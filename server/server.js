@@ -17,13 +17,18 @@ const app = express();
 connectDB();
 
 // CORS first
+// CORS first
 app.use(cors({
   origin: [
-    'http://localhost:3000',   
-    "https://anivoice-ai-v1.vercel.app/"                 // Local development
+    'http://localhost:3000',
+    'https://anivoice-ai-v1.vercel.app',           // ✅ NO trailing slash
+    'https://anivoice-ai-v1-*.vercel.app'          // ✅ Vercel preview deployments
   ],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 
 
 // Character routes BEFORE express.json() (no debug middleware!)
