@@ -41,7 +41,7 @@ export default function DashboardPage() {
       try {
         setLoading(true)
         const [characters, sub] = await Promise.all([
-          characterAPI.getAllCharacters(),
+          characterAPI.getPublicCharacters(),
           paymentAPI.getSubscription().catch(() => null)
         ])
 
