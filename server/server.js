@@ -17,7 +17,14 @@ const app = express();
 connectDB();
 
 // CORS first
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3000',   
+    "https://anivoice-ai-v1.vercel.app/"                 // Local development
+  ],
+  credentials: true
+}));
+
 
 // Character routes BEFORE express.json() (no debug middleware!)
 
