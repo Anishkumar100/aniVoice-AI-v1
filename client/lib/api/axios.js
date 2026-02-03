@@ -1,41 +1,3 @@
-import axios from "axios"
-import {storage} from "@/lib/utils/storage"
-
-const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-})
-
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const url = config.url || ''
-    const method = config.method?.toUpperCase() || ''
-    
-    // ✅ FIXED: More specific admin route detection
-    const isAdminRoute = 
-      url.startsWith('/api/admin') ||           // Only /api/admin/* routes
-      url.includes('/api/admin/') ||            // Ensure it's /api/admin/
-      url.includes('/characters/admin') ||      // Admin character routes
-      url === '/api/voice/options' ||           // Voice options (admin only)
-      (url.includes('/api/characters/create') || url.includes('/api/characters/update') || url.includes('/api/characters/delete'))
-    
-    const token = isAdminRoute ? storage.getAdminToken() : storage.getToken()
-    
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
-    
-    console.log(`[Axios] ${method} ${url} - Using ${isAdminRoute ? 'ADMIN' : 'USER'} token`)
-    
-    return config
-  },
-  (error) => Promise.reject(error)
-)
-
-
-
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -43,38 +5,33 @@ axiosInstance.interceptors.response.use(
       const url = error.config?.url || ''
       const method = error.config?.method?.toUpperCase() || ''
       
-      // ✅ FIXED: Explicit admin route detection - must explicitly be admin
+      // Same logic for error handling
       const isAdminRoute = 
-        url.startsWith('/api/admin') ||           // Only /api/admin/* routes
-        url.includes('/api/admin/') ||            // Ensure it's /api/admin/
-        url.includes('/characters/admin') ||      // Admin character routes
-        url === '/api/voice/options' ||           // Voice options (admin only)
-        (url.includes('/api/characters/create') || url.includes('/api/characters/update') || url.includes('/api/characters/delete'))
+        url.includes('/api/admin') || 
+        url.includes('/characters/admin') ||
+        url.includes('/voice/options') ||
+        (url.includes('/api/characters') && ['POST', 'PUT', 'DELETE'].includes(method))
 
-      // ✅ Only redirect if we're not already on an auth page
-      if (typeof window !== 'undefined') {
-        const currentPath = window.location.pathname
-        
-        // Don't redirect if already on auth page (prevents loops)
-        const isOnAuthPage = 
-          currentPath === '/login' || 
-          currentPath === '/register' || 
-          currentPath === '/admin/login' ||
-          currentPath === '/forgot-password'
-        
-        if (isOnAuthPage) {
-          return Promise.reject(error)
-        }
+      // ✅ DEBUG: Log what's happening
+      console.log('=== 401 ERROR DEBUG ===')
+      console.log('URL:', url)
+      console.log('Method:', method)
+      console.log('Is Admin Route?', isAdminRoute)
+      console.log('Current Path:', window.location?.pathname)
+      console.log('User Token:', storage.getToken())
+      console.log('Admin Token:', storage.getAdminToken())
+      console.log('=======================')
 
-        // Clear tokens and redirect
-        if (isAdminRoute) {
-          storage.removeAdminToken()
-          console.log('401 on admin route, redirecting to /admin/login')
+      if (isAdminRoute) {
+        storage.removeAdminToken()
+        if (typeof window !== 'undefined') {
+          console.log('Redirecting to /admin/login')
           window.location.href = '/admin/login'
-        } else {
-          storage.removeToken()
-          storage.removeUser()
-          console.log('401 on user route, redirecting to /login')
+        }
+      } else {
+        storage.removeToken()
+        if (typeof window !== 'undefined') {
+          console.log('Redirecting to /login')
           window.location.href = '/login'
         }
       }
