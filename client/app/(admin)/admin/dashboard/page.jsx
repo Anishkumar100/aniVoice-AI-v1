@@ -293,27 +293,6 @@ return (
         </div>
       </Link>
 
-      <Link
-        href="/admin/analytics"
-        className="group relative p-8 border-2 border-gray-200 dark:border-gray-800 rounded-2xl hover:border-blue-200 dark:hover:border-blue-900 transition-all bg-white dark:bg-black hover:shadow-xl hover:-translate-y-1 cursor-pointer overflow-hidden"
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent dark:from-blue-900/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-
-        <div className="relative">
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-14 h-14 rounded-xl bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-              <TrendingUp size={24} className="text-blue-600 dark:text-blue-400" />
-            </div>
-            <ArrowUpRight size={20} className="text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
-          </div>
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-            Analytics
-          </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Platform insights and metrics
-          </p>
-        </div>
-      </Link>
     </div>
 
     {/* Insights */}
