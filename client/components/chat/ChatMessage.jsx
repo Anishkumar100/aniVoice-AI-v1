@@ -17,8 +17,8 @@ export default function ChatMessage({
   const isUser = message.role === 'user';
   const isAI = message.role === 'assistant';
 
-  // ✅ Check if this message should be generating voice
-  const isGenerating = generatingVoice === message.id;
+  // ✅ FIX: Only show loading when actively generating THIS message
+  const isGeneratingThisMessage = generatingVoice === message.id;
 
   return (
     <div
@@ -78,8 +78,8 @@ export default function ChatMessage({
         {/* Voice Controls - Enhanced for AI messages */}
         {isAI && (
           <div className="flex items-center gap-2 pl-1">
-            {/* ✅ Generating Voice Indicator - Shows when generating OR should be generating */}
-            {shouldShowLoading && (
+            {/* ✅ Generating Voice Indicator - Only when actively generating */}
+            {isGeneratingThisMessage && (
               <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-rose-50 to-purple-50 dark:from-rose-950/30 dark:to-purple-950/30 border border-rose-200 dark:border-rose-900 text-rose-600 dark:text-rose-400 text-xs font-medium shadow-sm animate-in fade-in duration-300">
                 <Loader2 size={14} className="animate-spin" />
                 <span>Generating voice...</span>
@@ -87,7 +87,7 @@ export default function ChatMessage({
             )}
 
             {/* Play/Pause Button */}
-            {message.voiceUrl && !shouldShowLoading && (
+            {message.voiceUrl && !isGeneratingThisMessage && (
               <button
                 onClick={() => {
                   if (playingAudio === message.id) {
@@ -122,7 +122,7 @@ export default function ChatMessage({
             )}
 
             {/* Generate Voice Button - Only show when voice is OFF and no voiceUrl */}
-            {!message.voiceUrl && !shouldShowLoading && !autoPlayVoice && (
+            {!message.voiceUrl && !isGeneratingThisMessage && !autoPlayVoice && (
               <button
                 onClick={() => generateVoice(message.content, message.id)}
                 className="group/btn flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gradient-to-r hover:from-rose-500 hover:to-purple-600 text-gray-700 dark:text-gray-300 hover:text-white text-xs font-medium transition-all shadow-sm hover:shadow-md hover:shadow-rose-500/30"
