@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 import axiosInstance from '@/lib/api/axios'
 
-export default function AnalyticsContent() {
+export default function AdminAnalytics() {
   const [analytics, setAnalytics] = useState({
     monthlyRevenue: [],
     loading: true
@@ -57,6 +57,7 @@ export default function AnalyticsContent() {
 
   return (
     <div className="space-y-6 max-w-7xl">
+      {/* Header */}
       <div className="animate-in fade-in slide-in-from-top-4 duration-700">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
           Analytics
@@ -66,14 +67,19 @@ export default function AnalyticsContent() {
         </p>
       </div>
 
+      {/* Revenue Chart */}
       <Card className="p-6">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center">
             <BarChart3 className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white">Revenue Trend</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Last 6 months</p>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+              Revenue Trend
+            </h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Last 6 months
+            </p>
           </div>
         </div>
 
@@ -82,6 +88,7 @@ export default function AnalyticsContent() {
             <div className="h-64 flex items-end justify-between gap-2 md:gap-4">
               {analytics.monthlyRevenue.map((month, index) => {
                 const heightPercent = maxRevenue > 0 ? (month.revenue / maxRevenue) * 100 : 0
+                
                 return (
                   <div key={index} className="flex-1 flex flex-col items-center gap-2 group">
                     <div className="w-full relative">
@@ -89,19 +96,29 @@ export default function AnalyticsContent() {
                         ₹{(month.revenue / 100).toLocaleString('en-IN')}
                         <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 dark:bg-gray-100 rotate-45"></div>
                       </div>
+                      
                       <div 
                         className="w-full bg-gradient-to-t from-green-500 to-emerald-400 rounded-t-lg transition-all duration-500 hover:from-green-600 hover:to-emerald-500 cursor-pointer"
-                        style={{ height: `${heightPercent}%`, minHeight: month.revenue > 0 ? '8px' : '0px' }}
+                        style={{ 
+                          height: `${heightPercent}%`,
+                          minHeight: month.revenue > 0 ? '8px' : '0px'
+                        }}
                       />
                     </div>
+                    
                     <div className="text-center">
-                      <p className="text-xs font-semibold text-gray-900 dark:text-white">{month.month.split(' ')[0]}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{month.count}</p>
+                      <p className="text-xs font-semibold text-gray-900 dark:text-white">
+                        {month.month.split(' ')[0]}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {month.count}
+                      </p>
                     </div>
                   </div>
                 )
               })}
             </div>
+
             <div className="flex items-center justify-center gap-6 pt-4 border-t border-gray-200 dark:border-gray-800">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-gradient-to-br from-green-500 to-emerald-400"></div>
@@ -123,6 +140,7 @@ export default function AnalyticsContent() {
         )}
       </Card>
 
+      {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card className="p-6 hover:shadow-lg transition-all">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center mb-4">
@@ -131,7 +149,9 @@ export default function AnalyticsContent() {
           <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
             ₹{(totalRevenue / 100).toLocaleString('en-IN')}
           </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Total Revenue (6 months)</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Total Revenue (6 months)
+          </p>
         </Card>
 
         <Card className="p-6 hover:shadow-lg transition-all">
@@ -141,7 +161,9 @@ export default function AnalyticsContent() {
           <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
             ₹{(avgRevenue / 100).toLocaleString('en-IN')}
           </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Avg Monthly Revenue</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Avg Monthly Revenue
+          </p>
         </Card>
 
         <Card className="p-6 hover:shadow-lg transition-all">
@@ -151,9 +173,67 @@ export default function AnalyticsContent() {
           <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
             {analytics.monthlyRevenue.reduce((sum, m) => sum + m.count, 0)}
           </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Total Subscriptions (6 months)</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Total Subscriptions (6 months)
+          </p>
         </Card>
       </div>
+
+      {/* Monthly Table */}
+      <Card className="p-6">
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+          Monthly Breakdown
+        </h3>
+        
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-gray-200 dark:border-gray-800">
+                <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">
+                  Month
+                </th>
+                <th className="text-right py-3 px-4 text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">
+                  Revenue
+                </th>
+                <th className="text-right py-3 px-4 text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">
+                  Subscriptions
+                </th>
+                <th className="text-right py-3 px-4 text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase hidden md:table-cell">
+                  Avg/Sub
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {analytics.monthlyRevenue.map((month, index) => (
+                <tr 
+                  key={index}
+                  className="border-b border-gray-100 dark:border-gray-900 hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors"
+                >
+                  <td className="py-3 px-4">
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {month.month}
+                    </span>
+                  </td>
+                  <td className="py-3 px-4 text-right">
+                    <span className="font-semibold text-gray-900 dark:text-white">
+                      ₹{(month.revenue / 100).toLocaleString('en-IN')}
+                    </span>
+                  </td>
+                  <td className="py-3 px-4 text-right">
+                    <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400 text-sm font-semibold">
+                      <Crown size={12} />
+                      {month.count}
+                    </span>
+                  </td>
+                  <td className="py-3 px-4 text-right text-gray-600 dark:text-gray-400 hidden md:table-cell">
+                    ₹{month.count > 0 ? (Math.round(month.revenue / month.count) / 100).toLocaleString('en-IN') : '0'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
     </div>
   )
 }
