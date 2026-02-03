@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { Card } from '@/components/ui/card'
-import {
-  TrendingUp,
-  Users,
-  Crown,
+import { 
+  TrendingUp, 
+  Users, 
+  Crown, 
   Calendar,
   BarChart3,
   Activity
@@ -51,6 +51,10 @@ export default function AdminAnalyticsPage() {
   }
 
   const maxRevenue = Math.max(...analytics.monthlyRevenue.map(m => m.revenue), 1)
+  const totalRevenue = analytics.monthlyRevenue.reduce((sum, m) => sum + m.revenue, 0)
+  const avgRevenue = analytics.monthlyRevenue.length > 0 
+    ? Math.round(totalRevenue / analytics.monthlyRevenue.length) 
+    : 0
 
   return (
     <div className="space-y-6 max-w-7xl">
@@ -86,26 +90,26 @@ export default function AdminAnalyticsPage() {
             <div className="h-64 flex items-end justify-between gap-2 md:gap-4">
               {analytics.monthlyRevenue.map((month, index) => {
                 const heightPercent = maxRevenue > 0 ? (month.revenue / maxRevenue) * 100 : 0
-
+                
                 return (
                   <div key={index} className="flex-1 flex flex-col items-center gap-2 group">
                     {/* Bar */}
                     <div className="w-full relative">
                       {/* Tooltip */}
                       <div className="absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap pointer-events-none z-10">
-                        ₹{month.revenue.toLocaleString('en-IN')}
+                        ₹{(month.revenue / 100).toLocaleString('en-IN')}
                         <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 dark:bg-gray-100 rotate-45"></div>
                       </div>
-
-                      <div
+                      
+                      <div 
                         className="w-full bg-gradient-to-t from-green-500 to-emerald-400 rounded-t-lg transition-all duration-500 hover:from-green-600 hover:to-emerald-500 cursor-pointer"
-                        style={{
+                        style={{ 
                           height: `${heightPercent}%`,
                           minHeight: month.revenue > 0 ? '8px' : '0px'
                         }}
                       />
                     </div>
-
+                    
                     {/* Month Label */}
                     <div className="text-center">
                       <p className="text-xs font-semibold text-gray-900 dark:text-white">
@@ -152,7 +156,7 @@ export default function AdminAnalyticsPage() {
             </div>
           </div>
           <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
-            ₹{(analytics.monthlyRevenue.reduce((sum, m) => sum + m.revenue, 0) / 100).toLocaleString('en-IN')}
+            ₹{(totalRevenue / 100).toLocaleString('en-IN')}
           </p>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Total Revenue (6 months)
@@ -167,7 +171,7 @@ export default function AdminAnalyticsPage() {
             </div>
           </div>
           <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
-            ₹{(Math.round((analytics.monthlyRevenue.reduce((sum, m) => sum + m.revenue, 0) / (analytics.monthlyRevenue.length || 1))) / 100).toLocaleString('en-IN')}
+            ₹{(avgRevenue / 100).toLocaleString('en-IN')}
           </p>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Avg Monthly Revenue
@@ -195,7 +199,7 @@ export default function AdminAnalyticsPage() {
         <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
           Monthly Breakdown
         </h3>
-
+        
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -216,7 +220,7 @@ export default function AdminAnalyticsPage() {
             </thead>
             <tbody>
               {analytics.monthlyRevenue.map((month, index) => (
-                <tr
+                <tr 
                   key={index}
                   className="border-b border-gray-100 dark:border-gray-900 hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors"
                 >
@@ -238,7 +242,6 @@ export default function AdminAnalyticsPage() {
                   </td>
                   <td className="py-3 px-4 text-right text-gray-600 dark:text-gray-400 hidden md:table-cell">
                     ₹{month.count > 0 ? (Math.round(month.revenue / month.count) / 100).toLocaleString('en-IN') : '0'}
-
                   </td>
                 </tr>
               ))}
