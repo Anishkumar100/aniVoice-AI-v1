@@ -19,7 +19,6 @@ export default function ChatMessage({
 
   // ✅ Check if this message should be generating voice
   const isGenerating = generatingVoice === message.id;
-  const shouldShowLoading = isGenerating || (autoPlayVoice && !message.voiceUrl && isAI);
 
   return (
     <div
