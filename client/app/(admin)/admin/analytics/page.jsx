@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { Card } from '@/components/ui/card'
-import { 
-  TrendingUp, 
-  Users, 
-  Crown, 
+import {
+  TrendingUp,
+  Users,
+  Crown,
   Calendar,
   BarChart3,
   Activity
@@ -86,7 +86,7 @@ export default function AdminAnalyticsPage() {
             <div className="h-64 flex items-end justify-between gap-2 md:gap-4">
               {analytics.monthlyRevenue.map((month, index) => {
                 const heightPercent = maxRevenue > 0 ? (month.revenue / maxRevenue) * 100 : 0
-                
+
                 return (
                   <div key={index} className="flex-1 flex flex-col items-center gap-2 group">
                     {/* Bar */}
@@ -96,16 +96,16 @@ export default function AdminAnalyticsPage() {
                         ₹{month.revenue.toLocaleString('en-IN')}
                         <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-gray-900 dark:bg-gray-100 rotate-45"></div>
                       </div>
-                      
-                      <div 
+
+                      <div
                         className="w-full bg-gradient-to-t from-green-500 to-emerald-400 rounded-t-lg transition-all duration-500 hover:from-green-600 hover:to-emerald-500 cursor-pointer"
-                        style={{ 
+                        style={{
                           height: `${heightPercent}%`,
                           minHeight: month.revenue > 0 ? '8px' : '0px'
                         }}
                       />
                     </div>
-                    
+
                     {/* Month Label */}
                     <div className="text-center">
                       <p className="text-xs font-semibold text-gray-900 dark:text-white">
@@ -152,7 +152,7 @@ export default function AdminAnalyticsPage() {
             </div>
           </div>
           <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
-            ₹{analytics.monthlyRevenue.reduce((sum, m) => sum + m.revenue, 0)/100 .toLocaleString('en-IN')}
+            ₹{(analytics.monthlyRevenue.reduce((sum, m) => sum + m.revenue, 0) / 100).toLocaleString('en-IN')}
           </p>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Total Revenue (6 months)
@@ -167,7 +167,7 @@ export default function AdminAnalyticsPage() {
             </div>
           </div>
           <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
-            ₹{Math.round(analytics.monthlyRevenue.reduce((sum, m) => sum + m.revenue, 0) / analytics.monthlyRevenue.length || 0)/100 .toLocaleString('en-IN')}
+            ₹{(Math.round((analytics.monthlyRevenue.reduce((sum, m) => sum + m.revenue, 0) / (analytics.monthlyRevenue.length || 1))) / 100).toLocaleString('en-IN')}
           </p>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Avg Monthly Revenue
@@ -195,7 +195,7 @@ export default function AdminAnalyticsPage() {
         <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
           Monthly Breakdown
         </h3>
-        
+
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -216,7 +216,7 @@ export default function AdminAnalyticsPage() {
             </thead>
             <tbody>
               {analytics.monthlyRevenue.map((month, index) => (
-                <tr 
+                <tr
                   key={index}
                   className="border-b border-gray-100 dark:border-gray-900 hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors"
                 >
@@ -227,7 +227,7 @@ export default function AdminAnalyticsPage() {
                   </td>
                   <td className="py-3 px-4 text-right">
                     <span className="font-semibold text-gray-900 dark:text-white">
-                      ₹{month.revenue/100 .toLocaleString('en-IN')}
+                      ₹{(month.revenue / 100).toLocaleString('en-IN')}
                     </span>
                   </td>
                   <td className="py-3 px-4 text-right">
@@ -237,7 +237,8 @@ export default function AdminAnalyticsPage() {
                     </span>
                   </td>
                   <td className="py-3 px-4 text-right text-gray-600 dark:text-gray-400 hidden md:table-cell">
-                    ₹{month.count > 0 ? Math.round(month.revenue / month.count)/100 .toLocaleString('en-IN') : 0}
+                    ₹{month.count > 0 ? (Math.round(month.revenue / month.count) / 100).toLocaleString('en-IN') : '0'}
+
                   </td>
                 </tr>
               ))}
