@@ -27,6 +27,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Other routes
+app.get('/', (req, res) => {
+    res.send('AniVoice AI is running...');
+});
 app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
 app.use("/api/model", chatRoutes);
