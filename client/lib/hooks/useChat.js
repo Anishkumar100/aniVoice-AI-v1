@@ -24,7 +24,7 @@ export const useChat = (characterId, router) => {
   useEffect(() => {
     const fetchCharacter = async () => {
       try {
-        const data = await characterAPI.getCharacterById(characterId);
+        const data = await characterAPI.getPublicCharacterById(characterId);
         setCharacter(data);
       } catch (error) {
         console.error('Error fetching character:', error);
