@@ -41,7 +41,7 @@ export default function CharactersPage() {
     try {
       setLoading(true)
       const [charactersData, subData] = await Promise.all([
-        characterAPI.getAllCharacters(),
+        characterAPI.getPublicCharacters(),
         paymentAPI.getSubscription().catch(() => null)
       ])
       
