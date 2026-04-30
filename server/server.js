@@ -42,14 +42,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Explicit preflight handler for Express 5 compatibility
-app.options('*', cors({
-  origin: checkOrigin,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
 // Body parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
